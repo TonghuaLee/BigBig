@@ -1,0 +1,24 @@
+group 'com.broadlee.dream'
+version 'unspecified'
+
+
+apply plugin: 'java'
+
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+
+    //servlet api
+    compile "javax.servlet:javax.servlet-api:3.1.0"
+    compile "javax.servlet.jsp:javax.servlet.jsp-api:2.3.1"
+
+    //日志
+    compile "org.slf4j:slf4j-api:1.7.22"
+    compile "ch.qos.logback:logback-classic:1.1.8"
+    compile 'log4j:log4j:1.2.17'
+}

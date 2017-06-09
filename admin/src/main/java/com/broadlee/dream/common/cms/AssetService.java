@@ -1,0 +1,30 @@
+package com.broadlee.dream.common.cms;
+
+import com.broadlee.dream.common.BaseService;
+import com.broadlee.dream.domain.Asset;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
+
+
+public interface AssetService extends BaseService<Asset> {
+
+	Asset findAssetById(Long id);
+
+	List<Asset> readAllAssets();
+
+	Asset findAssetByUrl(String fullUrl);
+
+	Asset createAssetFromFile(MultipartFile file, Map<String, String> properties);
+
+	Asset createAsset(InputStream inputStream, String fileName, long fileSize, Map<String, String> properties);
+
+	Asset addAsset(Asset staticAsset);
+
+	Asset updateAsset(Asset staticAsset);
+
+	void deleteAsset(Asset staticAsset);
+
+}

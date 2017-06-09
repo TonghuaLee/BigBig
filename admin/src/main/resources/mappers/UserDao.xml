@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.broadlee.dream.dao.UserDao">
+  <resultMap id="userResult" type="com.broadlee.dream.domain.User">
+    <id column="id" property="id"/>
+    <result column="phone" property="phone" />
+    <result column="password" property="password" />
+    <result column="nickname" property="nickname" />
+    <result column="deactivated" property="deactivated" />
+    <result column="line_to_saler" property="canLineToSaler" />
+    <result column="avatar" property="avatar"/>
+    <result column="create_time" property="dateCreated"/>
+  </resultMap>
+
+
+
+  <select id="readUserById" parameterType="java.lang.Long" resultMap="userResult">
+    select id,phone,password,nickname,deactivated,line_to_saler from user where id=#{id}
+  </select>
+
+  <select id="readUserByPhone" parameterType="java.lang.String" resultMap="userResult">
+    select * from user where phone=#{phone}
+  </select>
+
+  <select id="readAllUsers" resultMap="userResult">
+    select * from user
+  </select>
+
+  <select id="readPhoneById" parameterType="java.lang.Long"  resultType="java.lang.String">
+    SELECT PHONE from user where id=#{id}
+  </select>
+
+  <insert id="insertUser" parameterType="com.broadlee.dream.domain.User" useGeneratedKeys="true" keyProperty="id">
+    insert into user (phone,password,nickname
+    <trim prefix="," suffix=")" suffixOverrides=",">
+      <if test="deactivated != null">
+        deactivated,
+      </if>
+      <if test="canLineToSaler != null">
+        line_to_saler,
+      </if>
+    </trim>
+    values (#{phone},#{password},#{nickname}
+    <trim prefix="," suffix=")" suffixOverrides=",">
+      <if test="deactivated != null">
+        #{deactivated},
+      </if>
+      <if test="canLineToSaler != null">
+        #{canLineToSaler},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updatePassword">
+    update user set password=#{passwd} where id=#{id}
+  </update>
+
+  <update id="updateAvatarUrl" >
+    update user set avatar=#{newurl} where id=#{id}
+  </update>
+
+  <update id="updateNickname" >
+    update user set nickname=#{newname} where id=#{id}
+  </update>
+
+
+</mapper>

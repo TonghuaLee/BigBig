@@ -1,0 +1,7 @@
+rootProject.name = 'study'
+include 'logconfig'
+include 'common'
+include 'admin'
+
+
+

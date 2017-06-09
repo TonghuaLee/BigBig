@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:sec="http://www.springframework.org/schema/security" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <sec:http pattern="/bootstrap/**" security="none" />
+    <sec:http pattern="/dist/**" security="none" />
+    <sec:http pattern="/plugins/**" security="none" />
+    <sec:http pattern="/WEB-INF/templet/ckeditor/skins/bootstrapck/.temp/css/dialog.css" security="none" />
+    <sec:http pattern="/WEB-INF/templet/starters/assets/js/plugins/forms/validation/localization/methods_es_CL.js" security="none" />
+    <sec:http pattern="/robots.txt" security="none" />
+	<sec:http pattern="/index" security="none" />
+	<sec:http pattern="/upload" security="none" />
+	<sec:http pattern="/uploadTest" security="none" />
+	<sec:http pattern="/feedback" security="none" />
+	<sec:http pattern="/help" security="none" />
+	<sec:http pattern="/aboutus" security="none" />
+
+    <sec:http
+    	auto-config="false" 
+    	authentication-manager-ref="apiAuthenticationManager"
+    	pattern="/api/**"
+    	create-session="stateless"
+		entry-point-ref="apiAuthenticationEntryPoint">
+		<sec:csrf disabled="true"/>
+
+		<sec:custom-filter ref="apiAuthenticationFilter" before="FORM_LOGIN_FILTER" />
+	</sec:http>
+	
+	<bean id="apiAuthenticationFilter" class="com.broadlee.dream.api.security.ApiAuthenticationProcessingFilter">
+        <property name="authenticationManager" ref="apiAuthenticationManager" />
+        <property name="authenticationSuccessHandler" ref="apiAuthenticationSuccessHandler" />
+        <property name="authenticationFailureHandler" ref="apiAuthenticationFailureHandler"></property>
+    </bean>
+
+    <sec:authentication-manager id="apiAuthenticationManager" alias="apiAuthenticationManager">
+        <sec:authentication-provider ref="apiAuthenticationProvider" />
+    </sec:authentication-manager>
+    
+    <bean id="apiAuthenticationProvider" class="com.broadlee.dream.api.security.ApiAuthenticationProvider"></bean>
+    <bean id="apiAuthenticationSuccessHandler" class="com.broadlee.dream.api.security.ApiAuthenticationSuccessHandler"></bean>
+    <bean id="apiAuthenticationFailureHandler" class="com.broadlee.dream.api.security.ApiAuthenticationFailureHandler"></bean>
+    <bean id="apiAuthenticationEntryPoint" class="com.broadlee.dream.api.security.RestAuthenticationEntryPoint"/>
+    
+    
+
+	<bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">
+		<constructor-arg>
+			<list>
+				<bean class="org.springframework.security.access.vote.RoleVoter">
+					<property name="rolePrefix" value="PERMISSION_" />
+				</bean>
+			</list>
+		</constructor-arg>
+	</bean>
+
+</beans>

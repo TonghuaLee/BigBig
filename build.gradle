@@ -1,0 +1,50 @@
+configure(allprojects) { project ->
+    group = "com.broadlee.dream"
+    apply plugin: "java"
+    apply plugin: 'idea'
+
+    compileJava {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+        options.encoding='UTF-8'
+    }
+
+    compileTestJava {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+        options.compilerArgs += "-parameters"
+        options.encoding ='UTF-8'
+    }
+
+    repositories {
+        maven {url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+        jcenter()
+        maven {url 'http://mvn.gt.igexin.com/nexus/content/repositories/releases/'}
+    }
+
+    ext.slf4jVersion = "1.7.22"
+    ext.servletVersion="3.1.0"
+    ext.jspVersion="2.3.1"
+}
+
+configure(rootProject) {
+    description = "想象者"
+
+    configurations.archives.artifacts.clear()
+
+    task wrapper(type: Wrapper) {
+        description = "Generates gradlew[.bat] scripts"
+        gradleVersion = "2.11"
+
+        doLast() {
+            def gradleOpts = "-XX:MaxMetaspaceSize=1024m -Xmx1024m"
+            def gradleBatOpts = "$gradleOpts -XX:MaxHeapSize=256m"
+            File wrapperFile = file("gradlew")
+            wrapperFile.text = wrapperFile.text.replace("DEFAULT_JVM_OPTS=", "GRADLE_OPTS=\"$gradleOpts \$GRADLE_OPTS\"\nDEFAULT_JVM_OPTS=")
+
+            File wrapperBatFile = file("gradlew.bat")
+            wrapperBatFile.text = wrapperBatFile.text.replace("set DEFAULT_JVM_OPTS=",
+                    "set GRADLE_OPTS=$gradleBatOpts %GRADLE_OPTS%\nset DEFAULT_JVM_OPTS=")
+        }
+    }
+}
